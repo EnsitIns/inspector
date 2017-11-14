@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><table build="© Silesta Ltd 2010, e-mail: silesta2003@mail.ru" console="yes" fH="550" fW="857" fX="365" fY="99" name="ENERGY INSPECTOR" version="3.0">
+	<page caption="База данных">
+		<frame caption="Параметры" position="Center">
+			<cell caption="Драйвер подключения" default_value="org.hsqldb.jdbcDriver" listing="com.mysql.jdbc.Driver;org.apache.derby.jdbc.EmbeddedDriver" name="driver" size="50" type="STRING" value="org.apache.derby.jdbc.EmbeddedDriver">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="0" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="5" gridx="1" gridy="0" type="listbox" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="IP-Адрес" default_value="192.168.1.102" enabled="driver&lt;&gt;org.apache.derby.jdbc.EmbeddedDriver" name="ip_addres" size="50" type="STRING" value="localhost">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="1" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="1" gridx="1" gridy="1" type="text" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Порт" default_value=" 1433" enabled="driver&lt;&gt;org.apache.derby.jdbc.EmbeddedDriver" name="port" size="50" type="INTEGER" value="3306">
+				<grid gridheight="1" gridwidth="1" gridx="2" gridy="1" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="1" gridx="4" gridy="1" type="text" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="База данных" default_value="DeffBase" enabled="driver&lt;&gt;org.apache.derby.jdbc.EmbeddedDriver" name="basename" size="50" type="STRING" value="klients15">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="2" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="5" gridx="1" gridy="2" type="text" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Путь к локальной базе  данных" enabled="driver&lt;&gt;com.mysql.jdbc.Driver" name="dopinfo" size="50" type="STRING" value="D:\projectIdea\KlientsBase">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="3" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="5" gridx="1" gridy="3" type="dir" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Пользователь" name="user" size="50" type="STRING" value="pes">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="4" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="1" gridx="1" gridy="4" type="text" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Пароль" name="password" size="50" type="STRING" value="silesta">
+				<grid gridheight="1" gridwidth="1" gridx="2" gridy="4" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="1" gridx="4" gridy="4" type="password" weightx="0" weighty="0"/>
+			</cell>
+		</frame>
+	</page>
+	<page caption="Настройки">
+		<frame caption="Связь" position="South">
+			<cell caption="HASP" default_value="0" name="gsm_on" type="Boolean" value="false">
+				<grid gridheight="1" gridwidth="3" gridx="1" gridy="0" type="checkbox" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Использовать локальный порт" default_value="1" name="gsm_local_on" type="Boolean" value="true">
+				<grid gridheight="1" gridwidth="3" gridx="4" gridy="0" type="checkbox" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Контроль событий" default_value="1" name="gsm_ring" type="Boolean" value="false">
+				<grid gridheight="1" gridwidth="3" gridx="7" gridy="0" type="checkbox" weightx="0" weighty="0"/>
+			</cell>
+		</frame>
+		<frame caption="Параметры" position="Center">
+			<cell caption="Идентификатор  мнемосхемы" default_value="0" listing="xsl" name="main_sxem" type="INTEGER" value="0">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="2" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="5" gridx="1" gridy="2" type="text" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Постоянная прорисовка" default_value="0" name="typ_scroll" type="Boolean" value="1">
+				<grid gridheight="1" gridwidth="5" gridx="7" gridy="2" type="checkbox" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Путь к редактору отчетов" default_value="C:/Program Files/Microsoft Office/Office12/EXCEL.EXE" name="excel_url" size="50" type="STRING" value="C:\Program Files (x86)\LibreOffice 4\program\scalc.exe">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="3" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="8" gridx="1" gridy="3" type="file" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Путь к редактору схем" default_value="" name="inskape_url" size="50" type="STRING" value="C:\Program Files (x86)\Inkscape\inkscape.exe">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="4" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="5" gridx="1" gridy="4" type="file" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Цветовая схема" default_value="com.sun.java.swing.plaf.windows.WindowsLookAndFeel" listing="com.sun.java.swing.plaf.windows.WindowsLookAndFeel;com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;com.sun.java.swing.plaf.motif.MotifLookAndFeel;javax.swing.plaf.metal.MetalLookAndFeel" name="look_feel" size="100" type="STRING" value="com.sun.java.swing.plaf.windows.WindowsLookAndFeel">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="5" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="5" gridx="1" gridy="5" type="listbox" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Модуль работы с портом" default_value="LINUX/ WINDOWS" listing="WINDOWS;LINUX/ WINDOWS" name="typ_port" size="50" type="STRING" value="LINUX/ WINDOWS">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="6" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="5" gridx="1" gridy="6" type="listbox" weightx="0" weighty="0"/>
+			</cell>
+		</frame>
+		<frame caption="Сигнализация" position="NORTH">
+			<cell caption="Звуковая сигнализация" default_value="0" name="siren" type="Boolean" value="1">
+				<grid gridheight="1" gridwidth="6" gridx="1" gridy="0" type="checkbox" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Файл звуковой сигнализации" default_value="" name="siren_file" size="50" type="STRING" value="E:\Inspector\alarm.wav">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="1" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="5" gridx="1" gridy="1" type="file" weightx="0" weighty="0"/>
+			</cell>
+		</frame>
+	</page>
+	<page caption="Локальный порт">
+		<frame caption="Параметры порта" position="West">
+			<cell caption="Порт" default_value="COM1" name="comm_port" size="10" type="STRING" value="COM3">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="0" type="label"/>
+				<grid gridheight="1" gridwidth="1" gridx="1" gridy="0" type="listcom"/>
+			</cell>
+			<cell caption="Биты данных" default_value="8" listing="8; 7; 6; 5; 4 " name="byte_size" size="10" type="INTEGER" value="8">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="1" type="label"/>
+				<grid gridheight="1" gridwidth="1" gridx="1" gridy="1" type="listbox"/>
+			</cell>
+			<cell caption="Скорость (бит/сек)" default_value="9600" listing="19200; 9600; 4800; 2400 " name="baud_rate" size="10" type="INTEGER" value="9600">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="2" type="label"/>
+				<grid gridheight="1" gridwidth="1" gridx="1" gridy="2" type="listbox"/>
+			</cell>
+			<cell caption="Стоп бит" default_value="1" listing="1" name="stop_bits" size="4" type="INTEGER" value="1">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="3" type="label"/>
+				<grid gridheight="1" gridwidth="1" gridx="1" gridy="3" type="listbox"/>
+			</cell>
+			<cell caption="Паритет(контроль четности)" default_value="Нет" listing="Нет; Чет; Нечет; Маркет(1); Пробел(0)" name="parity" size="11" type="STRING" value="Нет">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="4" type="label"/>
+				<grid gridheight="1" gridwidth="1" gridx="1" gridy="4" type="listbox"/>
+			</cell>
+		</frame>
+		<frame caption="Таймаут" position="Center">
+			<cell caption="Количество попыток дозвона" default_value="3" mask="####" name="count_sql" type="INTEGER" value="2">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="0" type="label"/>
+				<grid gridheight="1" gridwidth="1" gridx="1" gridy="0" type="text"/>
+			</cell>
+			<cell caption="Время ожидания ответа(мс)" default_value="3000" mask="####" name="time_aut" type="INTEGER" value="7000">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="1" type="label"/>
+				<grid gridheight="1" gridwidth="1" gridx="1" gridy="1" type="text"/>
+			</cell>
+			<cell caption="Пауза между командами(мс)" default_value="10" mask="####" name="sys_time" type="INTEGER" value="10">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="2" type="label"/>
+				<grid gridheight="1" gridwidth="1" gridx="1" gridy="2" type="text"/>
+			</cell>
+		</frame>
+	</page>
+	<page caption="Дополнительно">
+		<frame caption="Сервер уведомлений" position="North">
+			<cell caption="IP адрес сервера" default_value="0" name="server_ip" type="STRING" value="192.168.1.102">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="0" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="1" gridx="1" gridy="0" type="text" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Порт сервера" default_value="5200" name="server_port" type="INTEGER" value="5555">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="1" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="1" gridx="1" gridy="1" type="text" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Пользователь" default_value="" name="server_user" type="STRING" value="silesta2003@mail.ru">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="2" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="1" gridx="1" gridy="2" type="text" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Пароль" default_value="silesta2003@mail.ru" name="server_password" size="50" type="STRING" value="1eeee">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="3" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="1" gridx="1" gridy="3" type="password" weightx="0" weighty="0"/>
+			</cell>
+		</frame>
+		<frame caption="Логи" position="CENTER">
+			<cell caption="Суточный лог" default_value="0" name="log_send" type="Boolean" value="false">
+				<grid gridheight="1" gridwidth="3" gridx="0" gridy="0" type="checkbox" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Текущий лог" default_value="0" name="log_send_day" type="Boolean" value="false">
+				<grid gridheight="1" gridwidth="3" gridx="3" gridy="0" type="checkbox" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Лог  данных" default_value="0" name="log_txd" type="Boolean" value="true">
+				<grid gridheight="1" gridwidth="3" gridx="6" gridy="0" type="checkbox" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Идентификатор расписания" default_value="" name="log_id_schedulel" type="INTEGER" value="1">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="1" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="5" gridx="1" gridy="1" type="text" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Электронный адрес" default_value="silesta2003@mail.ru" name="log_mail" size="50" type="STRING" value="188.162.221.26">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="2" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="5" gridx="1" gridy="2" type="text" weightx="0" weighty="0"/>
+			</cell>
+		</frame>
+		<frame caption="Пользователь" position="South">
+			<cell caption="Вход под пользователем" default_value="0" name="as_user" type="Boolean" value="true">
+				<grid gridheight="1" gridwidth="3" gridx="0" gridy="0" type="checkbox" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Идентификатор пользователя" default_value="" name="id_user" type="INTEGER" value="3">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="1" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="5" gridx="1" gridy="1" type="text" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Пароль" default_value="silesta2003@mail.ru" name="password_user" size="50" type="STRING" value="netbeans">
+				<grid gridheight="1" gridwidth="1" gridx="0" gridy="2" type="label" weightx="0" weighty="0"/>
+				<grid gridheight="1" gridwidth="5" gridx="1" gridy="2" type="password" weightx="0" weighty="0"/>
+			</cell>
+			<cell caption="Работать локально" default_value="0" name="as_local_user" type="Boolean" value="false">
+				<grid gridheight="1" gridwidth="3" gridx="0" gridy="3" type="checkbox" weightx="0" weighty="0"/>
+			</cell>
+		</frame>
+	</page>
+</table>
