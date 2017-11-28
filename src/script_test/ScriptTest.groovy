@@ -90,78 +90,6 @@ class ScriptTest {
         //import connectdbf.SqlTask;
 
 
-        def par1 = values.get("#par1");// объект
-        def par2 = values.get("#par2") as Integer;// номер часа
-        def par3 = values.get("#par3") as Integer; // тип мощности(0-3)
-        if (par1 == -1) {
-            par1 = values.get("id_object") as Integer;
-        }
-
-
-        def last;
-        def first;
-
-        def dates = MathTrans.getDatesByMonth(-1);
-
-
-
-        first = dates[0];
-        last = dates[1];
-
-        def datesHour = MathTrans.getDateProfileHour(first, par2);
-        // def datePol = new DateTime(date.time).minusSeconds(30);
-
-
-        def idobj = "#prof${par1}";
-
-        def helpval = ScriptGroovy.hmHelp.get(idobj);
-
-
-        if (helpval == null) {
-
-            helpval = SqlTask.getObjectValues(null, "profil_power", par1, first, last);
-            ScriptGroovy.hmHelp.put(idobj, helpval);
-
-        }
-        def mapval0 = helpval.get(datesHour[0]);
-        def mapval1 = helpval.get(datesHour[1]);
-
-        if (mapval0 == null || mapval1 == null) {
-
-            return "нет данных"
-
-        }
-
-
-        def kt = values.get("kt");
-        def kn = values.get("kn");
-
-        def val0, val1;
-
-        if (par3 == 0) {
-            val0 = mapval0.get("power_pa");
-            val1 = mapval1.get("power_pa");
-
-        } else if (par3 == 1) {
-            val0 = mapval0.get("power_pr");
-            val1 = mapval1.get("power_pr");
-
-
-        } else if (par3 == 2) {
-            val0 = mapval0.get("power_qa");
-            val1 = mapval1.get("power_qa");
-
-
-        } else if (par3 == 3) {
-            val0 = mapval0.get("power_qr");
-            val1 = mapval1.get("power_qr");
-
-        }
-
-
-        return (val0 + val1) * kt * kn;
-
-
         servise.ExcelReport report = new ExcelReport(null);
         def nameContr = values.get("name_subconto");
         def id_subconto = values.get("id_subconto");
@@ -169,7 +97,7 @@ class ScriptTest {
         String fromXML = "80020XML";
         String fromError = "80020Error";
 
-        def error;
+        def error = false;
 
         def alSend = [];
         def id = values.get("group_subconto");
@@ -208,7 +136,9 @@ class ScriptTest {
 
                     //  MailClass.goMail(['ooo.ensit@gmail.com'], "Погрешность Отчета", "${it.value} ID=(${it.key})", nameContr, null, null);
 
-                    //       error=true;
+                    if (countObj != 0) {  // если 0 то не в работе
+                        error = true;
+                    }
 
 
                 }
@@ -238,11 +168,12 @@ class ScriptTest {
                     // error=true;
                     // MailClass.goMail(['ooo.ensit@gmail.com'], "Погрешность Отчета", "${it.value} ID=(${it.key})", nameContr, null, null);
 
-                    // error = true;
+                    error = false;
 
-                } else if (procent > 0.1) {
+                } else if (procent > 0.15) {
 
-                    //   error=true;
+
+                    error = true;
 
                     //  MailClass.goMail(['ooo.ensit@gmail.com'], "Погрешность Отчета", "${it.value} ID=(${it.key})", nameContr, null, null);
                     //  error = true;
@@ -295,7 +226,7 @@ class ScriptTest {
 
         }
 
-        //  alSend.clear();
+        alSend.clear();
 
         alSend << "ooo.ensit@gmail.com";
 
@@ -335,7 +266,6 @@ class ScriptTest {
         String sql = "UPDATE  subconto SET  is_send=1 WHERE  id_subconto=${id_subconto}";
 
         def result = SqlTask.executeSql(null, sql);
-
 
     }       // не копировать !
 
@@ -456,6 +386,80 @@ class ScriptTest {
     public Object evalCmdScript2(Map property, Map point, Integer pozcol, Integer pozrow,
                                  BitSet bitset, Map mapcommands, CommandGet cmd, ValuesByChannel channel) {
 
+
+        def to4byte = { num ->
+
+            def llbyte = [];
+
+            int t = (int) ((num & 0xFF000000) >>> 24);
+            llbyte.add(t);
+
+            t = (int) ((num & 0xFF0000) >>> 16);
+            llbyte.add(t);
+
+            t = (int) ((num & 0xFF00) >>> 8);
+            llbyte.add(t);
+
+            t = (int) (num & 0xFF);
+            llbyte.add(t);
+            return llbyte;
+
+        }
+
+        List ladd = cmd.getProperty('add');
+        List ldell = cmd.getProperty('del');
+
+        List listRes = [];
+
+        servise.CommandGet DelCounter = mapcommands.get('DelCountInCtrl');
+        servise.CommandGet AddCounter = mapcommands.get('AddCountInCtrl');
+        servise.CommandGet AddCounter206 = mapcommands.get('AddCount206InCtrl'); // для четырехбайтных
+
+
+        servise.CommandGet cmdDev;
+
+        // Всегда возвращаем список выполняемых команд
+
+        //channel.clearButtonsAndAnswer();
+
+        // Добавляем
+
+        if (ladd) {
+
+            ladd.eachWithIndex { num, idx ->
+
+                if (num > 255) {  //206
+                    cmdDev = AddCounter206.clone();
+                    def add = to4byte(num);
+                    add.each {
+                        cmdDev.addByteInSet(it);
+                    }
+                } else {
+                    cmdDev = AddCounter.clone();
+                    cmdDev.addByteInSet(num);
+                }
+                cmdDev.name = AddCounter.name + idx;
+                channel.addCommandClon(cmdDev.name, cmdDev);
+                listRes.add(cmdDev.name);
+            }
+
+
+        }
+
+// Удаляем
+        if (ldell) {
+
+            ldell.eachWithIndex { num, idx ->
+                cmdDev = DelCounter.clone();
+                cmdDev.name = DelCounter.name + idx;
+                cmdDev.addByteInSet(num);
+                mapcommands.put(cmdDev.name, cmdDev);
+                listRes.add(cmdDev.name);
+            }
+        }
+        return listRes;
+
+        //  channel.hm
 
         Object[] var = new Object[2]
 

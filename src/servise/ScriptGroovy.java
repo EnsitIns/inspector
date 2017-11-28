@@ -38,7 +38,7 @@ public class ScriptGroovy extends MainWorker {
 
 
     public static Object helpval; // Промежуточный объект для скриптов
-    public static HashMap<String, Object> hmHelp = new HashMap<String, Object>();// Для хронения промежуточных значений
+    public static HashMap<String, Object> hmHelp ;// Для хронения промежуточных значений
 
     private String nameSchedule;
     private String nameScript;  //Имя скрипта

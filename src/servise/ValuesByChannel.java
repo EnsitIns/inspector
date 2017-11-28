@@ -157,7 +157,7 @@ public class ValuesByChannel extends MainWorker {
     // или до перезагрузки
     public static boolean B_LOG_TXD; // лог приема -передачи
     //    public static JButton buttonGo; //кнопка запуска процесса
-    private HashMap<String, CommandGet> hmModem; // Команды GSM модема  и типа связи
+    private TreeMap<String, CommandGet> hmModem; // Команды GSM модема  и типа связи
     private ResultSet rsGet; //Запросы
     private ResultSet rsObjects; //Объекты запроса;
     private HashMap<Integer, ArrayList<Integer>> hmChannels;  // Объекты сгруппированые по каналу связи
@@ -374,12 +374,15 @@ public class ValuesByChannel extends MainWorker {
         this.typRegime = typRegime;
     }
 
+
+    public int getTypRegime() {
+        return this.typRegime;
+    }
+
+
     public void setValues() {
-
         typRegime = REJIM_SET_VALUES;
-
         executeProcess();
-
     }
 
     /**
@@ -438,6 +441,13 @@ public class ValuesByChannel extends MainWorker {
     public CommandGet getCommandByName(String nameCmd) {
 
         CommandGet result = null;
+
+        result = findCommand(nameCmd);
+
+        if (result != null) {
+            return result;
+        }
+
 
         if (hmCommands.containsKey(nameCmd)) {
 
@@ -701,7 +711,6 @@ public class ValuesByChannel extends MainWorker {
             GroovyShell shell = new GroovyShell(this.getClass().getClassLoader());
 
 
-
             if (hmScripts.containsKey(key)) {
 
                 script = hmScripts.get(key);
@@ -767,12 +776,12 @@ public class ValuesByChannel extends MainWorker {
             }
 
 
-        // GroovyShell  shell = new GroovyShell();
+            // GroovyShell  shell = new GroovyShell();
 
 
             // script= shell.parse(scriptCod);
 
-           // GroovyShell shell = new GroovyShell(this.getClass().getClassLoader());
+            // GroovyShell shell = new GroovyShell(this.getClass().getClassLoader());
 
             //script = shell.parse(scriptCod);
             //hmScripts.put(key, script);
@@ -3145,6 +3154,35 @@ public class ValuesByChannel extends MainWorker {
         return model;
     }
 
+
+    /**
+     * Добавление клонированных команд
+     *
+     * @param commandGet команда клон
+     */
+    public void addCommandClon(String name, CommandGet commandGet) {
+
+        if (hmAllCommands.containsKey("clon")) {
+
+            Map map = hmAllCommands.get("clon");
+
+            map.put(name, commandGet);
+
+        } else {
+
+            TreeMap<String, CommandGet> tmClon = new TreeMap<>();
+
+            tmClon.put(name, commandGet);
+
+            hmAllCommands.put("clon", tmClon);
+
+
+        }
+
+
+    }
+
+
     /**
      * Добавление добавочных команд из скрипта
      *
@@ -3301,7 +3339,7 @@ public class ValuesByChannel extends MainWorker {
 
             if (hmModem == null) {
 
-                hmModem = new HashMap<>();
+                hmModem = new TreeMap<>();
             }
 
             if (!hmModem.isEmpty()) {
@@ -3310,6 +3348,8 @@ public class ValuesByChannel extends MainWorker {
             String sql = "SELECT  * FROM  commands WHERE c_grup='Модем' OR c_grup='Связь' ";
 
             createCommands(sql, hmModem);
+            hmAllCommands.put("modem", hmModem);
+
         } catch (Exception ex) {
 
             setLogInfo("Создание модемных команд", ex);
@@ -4304,7 +4344,7 @@ public class ValuesByChannel extends MainWorker {
     private void createComPort() {
 
 
-       // serialPort = new Pi4jSerialPort(bitSetFlags, this);
+        // serialPort = new Pi4jSerialPort(bitSetFlags, this);
 
         serialPort = new JsscSerialPort(bitSetFlags, this);
 
@@ -5206,7 +5246,6 @@ public class ValuesByChannel extends MainWorker {
         }
 
 
-
         CommandGet cmd = null;
 
         errorString = null;
@@ -5494,7 +5533,6 @@ public class ValuesByChannel extends MainWorker {
                         }
 
 
-
                         result = question(typOper, al, waitTime, pauseTime, countSql, idPribor, number);
 
                         // Проверяем, есть ли сдвинутые команды
@@ -5678,7 +5716,7 @@ public class ValuesByChannel extends MainWorker {
      * Список команд по группе счетчика hmFrom -Откуда lWhere-Куда
      */
     public static void getCommandByCroup(String NameGroup, String Value,
-                                         HashMap<String, CommandGet> hmFrom, List<CommandGet> lWhere) {
+                                         Map<String, CommandGet> hmFrom, List<CommandGet> lWhere) {
 
         lWhere.clear();
         String gr = null;
@@ -5863,21 +5901,25 @@ public class ValuesByChannel extends MainWorker {
      *
      * @param nameCmd - Имя добавляемой команды
      */
-    public void addFirstCmd(String nameCmd, CommandGet command) {
+    public boolean addFirstCmd(String nameCmd, CommandGet command) {
 
+        Boolean result = false;
         // CommandGet command1 = findCommandByName(nameCmd, alAddition, TF_ALL);
         CommandGet command1;
 
-        command1 = hmCommands.get(nameCmd);
+        command1 = findCommand(nameCmd);
 
         //   int idx = alRun.indexOf(command);
         if (command1 != null) {
 
+            result = true;
             if (!alAddition.contains(command1.name)) {
                 alAddition.add(command1.name);
             }
         }
 
+
+        return result;
     }
 
     /**
@@ -5890,7 +5932,7 @@ public class ValuesByChannel extends MainWorker {
         // CommandGet command1 = findCommandByName(nameCmd, alAddition, TF_ALL);
         CommandGet command1;
 
-        command1 = hmCommands.get(nameCmd);
+        command1 = findCommand(nameCmd);
 
         if (command1 != null) {
 
@@ -7337,6 +7379,25 @@ public class ValuesByChannel extends MainWorker {
 
         return result;
     }
+
+    public CommandGet findCommand(String name) {
+
+        CommandGet result = null;
+
+        for (String pribor : hmAllCommands.keySet()) {
+
+            TreeMap<String, CommandGet> commands = hmAllCommands.get(pribor);
+
+            result = commands.get(name);
+
+            if (result != null) {
+                return result;
+            }
+
+        }
+        return result;
+    }
+
 
     public String findScriptById(int id, String tscript) throws SQLException {
 
@@ -9924,7 +9985,7 @@ public class ValuesByChannel extends MainWorker {
 
         // Выполняем  функции  исполнения команды которые  выполняются перед командой
         CommandGet commandGet;
-        commandGet = hmCommands.get(nameCmd);
+        commandGet = findCommand(nameCmd);
 
         if (commandGet != null) {
             invokeMetod(commandGet, GO_BEGIN);
@@ -9996,10 +10057,6 @@ public class ValuesByChannel extends MainWorker {
 
     }
 
-    public void setiTypRegime(int iTypRegime) {
-        this.typRegime = iTypRegime;
-
-    }
 
     /**
      * Установка команд по модели
@@ -10024,6 +10081,29 @@ public class ValuesByChannel extends MainWorker {
         }
 
         return result;
+
+    }
+
+    /**
+     * Если есть контроллер то добавляем команды
+     */
+
+    private void setCommandsController(Integer idPoint) throws Exception {
+
+        // Добавляем параметры контроллера, если он есть
+        hmController = Work.getMapController(idPoint);
+
+        if (!hmController.isEmpty()) {
+
+            typContoller = (String) hmController.get("typ_controller");
+
+            TreeMap<String, CommandGet> tmCont = getCommandsByModel(typContoller);
+
+            hmAllCommands.put(typContoller, tmCont);
+
+
+        }
+
 
     }
 
@@ -10303,7 +10383,7 @@ public class ValuesByChannel extends MainWorker {
 
         List<Integer> lObjects;
 // По умолчанию    установлен влаг использовать повторяющиеся команды
-       bitSetFlags.set(BSF_REPEAT_ON);
+        bitSetFlags.set(BSF_REPEAT_ON);
 
         // if (serialPort.isStop()) {
         //   return;
@@ -10314,6 +10394,12 @@ public class ValuesByChannel extends MainWorker {
 // Начинаем...
 
             try {
+
+                //Контроллер
+
+                // Добавляем параметры контроллера, если он есть
+                //  hmController = Work.getMapController(idPoint);
+
 
                 lObjects = hmChannels.get(idPoint);
 
@@ -10401,6 +10487,7 @@ public class ValuesByChannel extends MainWorker {
 
             }
 
+
             //   overpackWrapp=new OverpackWrapp(hmModem);
             for (Integer idObject : lObjects) {
 
@@ -10420,6 +10507,14 @@ public class ValuesByChannel extends MainWorker {
                 try {
 
                     hmProperty = Work.getParametersRow(idObject, null, nameTable, true, false);
+
+
+                    if (!hmController.isEmpty()) {
+
+                        hmProperty.putAll(hmController);
+
+                    }
+
 
                     // Записываемые данные
                     if (!hmWrite.isEmpty()) {
@@ -10523,7 +10618,7 @@ public class ValuesByChannel extends MainWorker {
                         // questionOverPack(alRun, idObject);
                     }
 
-                     hmRepeat = new HashMap();
+                    hmRepeat = new HashMap();
 
                     // выполняем команды и флаги для текущего типа связи
                     // для каждого объекта (object)
@@ -10534,7 +10629,6 @@ public class ValuesByChannel extends MainWorker {
                     setMinMaxValue(0, cmd_size);
 
                     CommandGet result;
-
 
 
                     result = question(currOperation, alRun, time_aut, sys_time, count_sql, idObject, 0);
@@ -10653,7 +10747,7 @@ public class ValuesByChannel extends MainWorker {
         typContoller = null;
         typPack = null;
 //Устанавливаем режим чтения/записи данных
-      //  bitSetFlags.set(BSF_RUN_COMMANDS);
+        //  bitSetFlags.set(BSF_RUN_COMMANDS);
         bitSetFlags.clear(BSF_GSM_YES);
 // Устанавливаем комады для всех  типов приборов запроса
         try {
@@ -10662,6 +10756,13 @@ public class ValuesByChannel extends MainWorker {
             // Устанавливаем комады для всех  типов приборов запроса
             setBeforeCommandsModels(
                     alGroup);
+
+
+            // Устанавливаем текущие команды контроллера
+
+            setCommandsController(idPoint);
+
+
 // Предварительно выбраные команды
             //   setBeforeCommandsSelect();
             //setCommandsInGroup(alGroup);
@@ -10958,7 +11059,7 @@ public class ValuesByChannel extends MainWorker {
 
         // }
 
-        typContoller = null;
+        // typContoller = null;
         // typPack = null;
         ((Port) serialPort).setComPack(null);
 
@@ -11003,12 +11104,12 @@ public class ValuesByChannel extends MainWorker {
 
         // bitSetFlags.set(BSF_GSM_YES);
         // Добавляем параметры контроллера, если он есть
-        hmController = Work.getMapController(id);
+        //  hmController = Work.getMapController(id);
 
         if (!hmController.isEmpty()) {
 
             hmPoint.putAll(hmController);
-            typContoller = (String) hmController.get("typ_controller");
+            // typContoller = (String) hmController.get("typ_controller");
 
             //  if(hmController.get("str1"))
             //  контроллер со своим протоколом упаковки данных

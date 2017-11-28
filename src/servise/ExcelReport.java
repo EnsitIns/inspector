@@ -1364,7 +1364,9 @@ public class ExcelReport extends MainWorker {
 
             String lName = "Лист - " + idx;
             if (nameList != null) {
-                lName = hmCurParam.get(nameList).toString();
+                if(hmCurParam.containsKey(nameList)){
+                    lName = hmCurParam.get(nameList).toString();
+                }
 
             }
 
