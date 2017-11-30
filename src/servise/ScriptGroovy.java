@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.concurrent.ExecutorService;
 
@@ -38,7 +39,7 @@ public class ScriptGroovy extends MainWorker {
 
 
     public static Object helpval; // Промежуточный объект для скриптов
-    public static HashMap<String, Object> hmHelp ;// Для хронения промежуточных значений
+    public static HashMap<String, Object> hmHelp;// Для хронения промежуточных значений
 
     private String nameSchedule;
     private String nameScript;  //Имя скрипта
@@ -253,7 +254,6 @@ public class ScriptGroovy extends MainWorker {
 
             if (resultSet.next()) {
                 Integer idScript = resultSet.getInt("id_script");
-
                 nameScript = getScriptName(idScript);
                 id_sql = resultSet.getInt("id_sql");
                 String sGroup = resultSet.getString("group_groovy");
@@ -323,9 +323,20 @@ public class ScriptGroovy extends MainWorker {
                     if (isSMS) {
                         // Отправляем sms при запуске...
 
+                        Map<String,String> prms=MathTrans.stringToMap(parameters,";");
+
+                       //String phone
+
+                        String phone=prms.get("телефон");
+                        String port=prms.get("порт");
+
+                        if(phone!=null && port!=null) {
+
+                            ValuesByChannel channel = new ValuesByChannel(null, null);
+                            channel.sendSMS(nameSchedule, phone, port);
+                        }
 
                     }
-
 
 
                     if (isMail) {
@@ -339,7 +350,7 @@ public class ScriptGroovy extends MainWorker {
 
                         set.beforeFirst();
 
-                        String msg = "Расписание: "+nameSchedule+". Запуск скрипта :" + nameScript + ". Объектов -" + rowCount;
+                        String msg = "Расписание: " + nameSchedule + ". Запуск скрипта :" + nameScript + ". Объектов -" + rowCount;
 
                         MailClass.goMail(list, "Уведомление ЭНСИТ", msg, nameSchedule, null, null);
 
@@ -354,7 +365,7 @@ public class ScriptGroovy extends MainWorker {
                         hmParam.put("#rs", set);
                         hmParam.put("#parameters", parameters);
 
-                            goScript(hmParam);
+                        goScript(hmParam);
 
 
                     }

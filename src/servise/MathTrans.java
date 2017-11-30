@@ -11,6 +11,7 @@ import net.sf.json.JSONObject;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.joda.time.format.*;
+
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
@@ -127,6 +128,25 @@ public class MathTrans {
     private static long CRC24_INIT = 0x00b704ce;
 
     private static long CRC24_POLY = 0x1864CFB;
+
+    public static HashMap<String, String> stringToMap(String str, String del) {
+
+        HashMap<String, String> result = new HashMap<>();
+
+        String[] spar = str.split(del);
+
+        for (int i = 0; i < spar.length; i++) {
+
+            String[] parameter = spar[i].split("=");
+
+            result.put(parameter[0], parameter[1]);
+
+        }
+
+
+        return result;
+    }
+
 
     public static int[] getCRC24Tab(List<Integer> octets) {
 
@@ -364,7 +384,6 @@ public class MathTrans {
     }
 
 
-
     /**
      * Возвращает дату по номеру часа в строковом формате
      * Первый час 1=1:00
@@ -383,18 +402,13 @@ public class MathTrans {
         DateTimeFormatter dtf = DateTimeFormat.forPattern("dd.MM.YY HH:mm");
 
 
-
         return dateResult.toString(dtf);
 
 
         //result = new Timestamp(dateResult.getMillis());
 
 
-
     }
-
-
-
 
 
     /**
@@ -415,12 +429,10 @@ public class MathTrans {
         DateTimeFormatter dtf = DateTimeFormat.forPattern("dd.MM.YY HH:mm");
 
 
-
         return dateResult.toString(dtf);
 
 
         //result = new Timestamp(dateResult.getMillis());
-
 
 
     }
@@ -430,14 +442,14 @@ public class MathTrans {
      * Возвращает две даты по  номеру часа
      * Первый час 1=1:00
      *
-     * @param number  номер часа
+     * @param number номер часа
      * @param last   начальная дата
      * @return
      */
 
     public static Timestamp[] getDateProfileHour(DateTime last, int number) {
 
-        Timestamp[] result=new Timestamp[2];
+        Timestamp[] result = new Timestamp[2];
 
         DateTime dateResult = new DateTime(last);
 
@@ -510,7 +522,7 @@ public class MathTrans {
         } else if (typ == 17) {
             // начало предыдущих суток
             dateTime = new DateTime().millisOfDay().setCopy(0);
-            dateTime =dateTime.minusDays(1);
+            dateTime = dateTime.minusDays(1);
 
         } else if (typ < 0) {
             // на начало  месяца  текущий -'typ' 
@@ -563,7 +575,6 @@ public class MathTrans {
         dtBegin = dtBegin.millisOfDay().setCopy(0);
 
 
-
         if (iMonth == -1) {
             // За предыдущий месяц
             dtEnd = dtBegin.dayOfMonth().setCopy(1);
@@ -580,19 +591,13 @@ public class MathTrans {
             dtEnd = new DateTime(ScriptGroovy.dpLast.getDate()).millisOfDay().setCopy(0);// конец
 
 
-
         } else if (iMonth == 14) {
-        // За текущий год
-        dtBegin =   dtBegin.monthOfYear().setCopy(1).dayOfYear().setCopy(1);  // начало;
-        dtEnd = new DateTime(); //конец
+            // За текущий год
+            dtBegin = dtBegin.monthOfYear().setCopy(1).dayOfYear().setCopy(1);  // начало;
+            dtEnd = new DateTime(); //конец
 
 
-
-    }
-
-
-
-        else {
+        } else {
 
             // за конкретный месяц (1-12)
             dtEnd = dtBegin.dayOfMonth().setCopy(1).monthOfYear().setCopy(iMonth + 1);
@@ -697,6 +702,45 @@ public class MathTrans {
         res = new String(buffer, "UTF-16");
         return res;
     }
+
+
+    private static String StringToUSC2(String text) throws Exception {
+        byte[] textOnBytes = text.getBytes("UTF-16");
+        String textInUSC = "";
+        for (int i = 2; i < textOnBytes.length; i++) {
+            String buff = Integer.toHexString((int) textOnBytes[i]);
+            if (buff.length() % 2 == 1) {
+                textInUSC += "0";
+            }
+            textInUSC += buff;
+        }
+        String msgTextLength = Integer.toHexString(textInUSC.length() / 2);
+        // Если длина нечётная - добавляем в начале 0
+        if (msgTextLength.length() % 2 == 1) {
+            msgTextLength = "0" + msgTextLength;
+        }
+        return (msgTextLength + textInUSC).toUpperCase();
+    }
+
+
+    public static String reversePhone(String phone) {
+        if (phone.length() % 2 == 1) phone += "F";
+        String phoneRev = "";
+        phoneRev += phone.charAt(1);
+        phoneRev += phone.charAt(0);
+        phoneRev += phone.charAt(3);
+        phoneRev += phone.charAt(2);
+        phoneRev += phone.charAt(5);
+        phoneRev += phone.charAt(4);
+        phoneRev += phone.charAt(7);
+        phoneRev += phone.charAt(6);
+        phoneRev += phone.charAt(9);
+        phoneRev += phone.charAt(8);
+        phoneRev += phone.charAt(11);
+        phoneRev += phone.charAt(10);
+        return phoneRev;
+    }
+
 
     public static String convertToUCS2(String skonvert) throws UnsupportedEncodingException {
 
@@ -1917,10 +1961,9 @@ public class MathTrans {
 
         String result = "";
 
-        if(list==null || list.isEmpty()){
+        if (list == null || list.isEmpty()) {
             return "Пустой пакет.";
         }
-
 
 
         for (int i : list) {
@@ -1932,7 +1975,7 @@ public class MathTrans {
 
         }
 
-        result=result.substring(0,result.length()-1);
+        result = result.substring(0, result.length() - 1);
 
         return result;
     }

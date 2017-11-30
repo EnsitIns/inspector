@@ -8,7 +8,8 @@ import org.joda.time.DateTime
 class MathTransTest extends GroovyTestCase {
 
 
-    void testGetDateProfile() {
+
+  void testGetDateProfile() {
 
         def dates = MathTrans.getDatesByMonth(-1);
 
@@ -35,6 +36,15 @@ class MathTransTest extends GroovyTestCase {
 
 
     }
+
+
+   void  testStringToMap(){
+
+
+   Map map=MathTrans.stringToMap("порт=40;телефон=89172562616",";")
+
+     assertNull(map);
+   }
 
 
 

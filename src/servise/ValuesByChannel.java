@@ -5731,14 +5731,39 @@ public class ValuesByChannel extends MainWorker {
 
     }
 
-    public synchronized void sendSMS(String msg, String phone) throws Exception {
+    public synchronized void sendSMS(String msg, String phone,String port) throws Exception {
 
         try {
 
-            ParamPort paramPort = new ParamPort(hmPoint, HM_LOCALE, portSchesule);
+
+            String namePort=null;
 
 
-            String namePort = getFreeGsmPort(paramPort);
+            if (port!=null) {
+
+                String[] namesPorts = jssc.SerialPortList.getPortNames();
+
+
+                for (int i = 0; i < namesPorts.length; i++) {
+
+
+                    if (namesPorts[i].contains(port)){
+
+                        namePort = namesPorts[i];
+
+
+                    break;
+                    }
+
+                }
+
+
+            }
+
+            ParamPort paramPort = new ParamPort(hmPoint, HM_LOCALE, namePort);
+
+
+          //  String namePort = getFreeGsmPort(paramPort);
 
             if (namePort == null) {
                 return;
@@ -5758,6 +5783,11 @@ public class ValuesByChannel extends MainWorker {
             String ucs2msg = MathTrans.convertToUCS2(msg);
 
             String ucs2tlf = MathTrans.convertToUCS2(phone);
+
+          //  String ucs2tlf = MathTrans.reversePhone(phone);
+
+
+
 
             alRun.clear();
 
