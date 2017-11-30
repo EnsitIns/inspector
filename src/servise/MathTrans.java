@@ -129,6 +129,17 @@ public class MathTrans {
 
     private static long CRC24_POLY = 0x1864CFB;
 
+
+
+    /**
+     * Делает  из строки карту
+     *
+     * @param str     "Строка типа порт=40;телефон=777777"
+     * @param del разлелитель в данном случае ";"
+     * @return карта значений
+     */
+
+
     public static HashMap<String, String> stringToMap(String str, String del) {
 
         HashMap<String, String> result = new HashMap<>();
