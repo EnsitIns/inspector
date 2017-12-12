@@ -920,7 +920,7 @@ public class ValuesByChannel extends MainWorker {
 
     }
 
-
+    // TODO: Запрос данных по кнопке 
     private void startGetValueByButton(Observable o) {
         SelectProcessInterface process = (SelectProcessInterface) o;
 
@@ -5229,6 +5229,7 @@ public class ValuesByChannel extends MainWorker {
 
         CommandGet result = null;
 
+        int countError = 0; //счетчик подряд не ответивших команд
 
         if (bitSetFlags.get(ValuesByChannel.BSF_BUFER_PACK))
         //Пакетный режим
@@ -5365,6 +5366,10 @@ public class ValuesByChannel extends MainWorker {
 
                 }
 
+                // Счетчик подряд не ответившых команд
+
+                // если несколько команд подряд не отвечают, то выходим
+
                 // try {
 
                 if (!cmd.bEmpty) {
@@ -5376,7 +5381,11 @@ public class ValuesByChannel extends MainWorker {
 
                     if (!((Port) serialPort).doSend(cmd)) {
 
+
                         // Команда не ответила
+
+                        countError = countError + 1;
+
                         invokeMetod(cmd, GO_ERROR);
                         cmdError = cmd;
 
@@ -5403,7 +5412,22 @@ public class ValuesByChannel extends MainWorker {
 
 
                         }
+                    } else {
+
+                        //команда ответила
+                        countError = 0;
+
+
                     }
+
+                }
+
+
+                if (countError >= 3) {
+
+                    // Команды не ответили подряд выходим
+                    result = cmd;
+                    return result;
 
                 }
 
@@ -5731,15 +5755,15 @@ public class ValuesByChannel extends MainWorker {
 
     }
 
-    public synchronized void sendSMS(String msg, String phone,String port) throws Exception {
+    public synchronized void sendSMS(String msg, String phone, String port) throws Exception {
 
         try {
 
 
-            String namePort=null;
+            String namePort = null;
 
 
-            if (port!=null) {
+            if (port != null) {
 
                 String[] namesPorts = jssc.SerialPortList.getPortNames();
 
@@ -5747,12 +5771,12 @@ public class ValuesByChannel extends MainWorker {
                 for (int i = 0; i < namesPorts.length; i++) {
 
 
-                    if (namesPorts[i].contains(port)){
+                    if (namesPorts[i].contains(port)) {
 
                         namePort = namesPorts[i];
 
 
-                    break;
+                        break;
                     }
 
                 }
@@ -5763,7 +5787,7 @@ public class ValuesByChannel extends MainWorker {
             ParamPort paramPort = new ParamPort(hmPoint, HM_LOCALE, namePort);
 
 
-          //  String namePort = getFreeGsmPort(paramPort);
+            //  String namePort = getFreeGsmPort(paramPort);
 
             if (namePort == null) {
                 return;
@@ -5784,9 +5808,7 @@ public class ValuesByChannel extends MainWorker {
 
             String ucs2tlf = MathTrans.convertToUCS2(phone);
 
-          //  String ucs2tlf = MathTrans.reversePhone(phone);
-
-
+            //  String ucs2tlf = MathTrans.reversePhone(phone);
 
 
             alRun.clear();

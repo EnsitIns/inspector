@@ -185,7 +185,7 @@ class ScriptTest {
 
 
         if (error) {
-            return;
+  //          return;
         }
 
 
@@ -226,7 +226,6 @@ class ScriptTest {
 
         }
 
-        alSend.clear();
 
         alSend << "ooo.ensit@gmail.com";
 
