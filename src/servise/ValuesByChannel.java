@@ -5401,6 +5401,17 @@ public class ValuesByChannel extends MainWorker {
 
                             // добавляем в черный список и выходим
 
+                            //Если ручной режим выводим сообщение
+
+                            if (this.getTypRegime() == ValuesByChannel.REJIM_GET_HAND) {
+
+
+                                JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+
+
+                            }
+
+
                             addCmdInBlackList(idPribor, errorString, 7);
 
                             //   mapMessageProcess.setInfoProcess(idPribor, MapMessageProcess.DATA_BLACK);
@@ -8379,6 +8390,13 @@ public class ValuesByChannel extends MainWorker {
 
             for (int i = 0; i < countIter; i++) {
 
+
+                if (errorString != null) {
+
+                    break;
+                }
+
+
                 if (((Port) serialPort).isStop()) {
 
                     setNotifyObservers(esStopCommands);
@@ -10461,21 +10479,43 @@ public class ValuesByChannel extends MainWorker {
                 try {
                     // Установка параметров текущего присоединения
 
-                    openChannel(idPoint);
+                    errorString = openChannel(idPoint);
                 } finally {
                     //  setNotifyObservers(esGoCommands);
 
 
+                    // Ошибка
+
+                    if (errorString != null && getTypRegime() == REJIM_GET_HAND) {
+
+                        JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+
+                        return;
+
+                    }
+
+
                     //Если ошибка или объкт не доступен
-                    if (bitSetFlags.get(BSF_ERROR) || bitSetFlags.get(BSF_NO_CARRIER)) {
+                    if ((bitSetFlags.get(BSF_ERROR) || bitSetFlags.get(BSF_NO_CARRIER)) && getTypRegime() == REJIM_GET_HAND) {
+
+
+                        errorString = "Удаленный модем недоступен.";
+
+                        JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+
 
                         addPointInBlackList(idPoint, MapMessageProcess.DATA_BLACK);
+
                         return;
 
                     }
 
                     //Номер занят
-                    if (bitSetFlags.get(BSF_BUSY)) {
+                    if (bitSetFlags.get(BSF_BUSY) && getTypRegime() == REJIM_GET_HAND) {
+
+                        errorString = "Номер занят.";
+
+                        JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
 
                         return;
 
@@ -10672,9 +10712,26 @@ public class ValuesByChannel extends MainWorker {
 
                     hmRepeat = new HashMap();
 
+
+                    errorString = null;
+
                     // выполняем команды и флаги для текущего типа связи
                     // для каждого объекта (object)
                     runCommandByScript(typConnect, TS_RESULT);
+
+                    if (errorString != null) {
+
+                        if (this.getTypRegime() == ValuesByChannel.REJIM_GET_HAND) {
+
+
+                            JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+
+                            return;
+                        }
+
+
+                    }
+
 
                     int cmd_size = getCountCmd(alRun);
 
@@ -11062,10 +11119,12 @@ public class ValuesByChannel extends MainWorker {
      * @param id -точка присоединение (Point)
      * @throws Exception
      */
-    private void openChannel(int id) throws Exception {
+    private String openChannel(int id) throws Exception {
+
+        String result = null;
 
 // TODO: Открываем канал связи
-        boolean result = false;
+
 
         // Параметры текущего канала связи
         hmPoint = Work.getParametersRow(id, null, "points", false, true);
@@ -11129,7 +11188,11 @@ public class ValuesByChannel extends MainWorker {
 //            paramPort.setNamePort(namePort);
 
 
-            serialPort.openPort(paramPort);
+            if (!serialPort.openPort(paramPort)) {
+
+                result = "Не удалось открыть порт " + serialPort.getPortName();
+                return result;
+            }
 
         } catch (Exception e) {
 
@@ -11176,6 +11239,7 @@ public class ValuesByChannel extends MainWorker {
 
         }
 
+        return result;
         // Выполняем скрипт после присоединения
         //    if (comScript != null) {
         //
