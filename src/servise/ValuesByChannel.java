@@ -5406,7 +5406,7 @@ public class ValuesByChannel extends MainWorker {
                             if (this.getTypRegime() == ValuesByChannel.REJIM_GET_HAND) {
 
 
-                                JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                            //    JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
 
 
                             }
@@ -8393,6 +8393,13 @@ public class ValuesByChannel extends MainWorker {
 
                 if (errorString != null) {
 
+
+                    if (this.getTypRegime() == ValuesByChannel.REJIM_GET_HAND || this.getTypRegime() == ValuesByChannel.REJIM_GET_BUTTON ) {
+
+                        JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                    }
+
+
                     break;
                 }
 
@@ -8440,7 +8447,7 @@ public class ValuesByChannel extends MainWorker {
 
             } else {
 
-                answerProcess(errorString, ProcLogs.MSG_ERROR);
+            //    answerProcess(errorString, ProcLogs.MSG_ERROR);
 
             }
 
@@ -10488,7 +10495,7 @@ public class ValuesByChannel extends MainWorker {
 
                     if (errorString != null && getTypRegime() == REJIM_GET_HAND) {
 
-                        JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                      //  JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
 
                         return;
 
@@ -10501,7 +10508,7 @@ public class ValuesByChannel extends MainWorker {
 
                         errorString = "Удаленный модем недоступен.";
 
-                        JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                      //  JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
 
 
                         addPointInBlackList(idPoint, MapMessageProcess.DATA_BLACK);
@@ -10515,7 +10522,7 @@ public class ValuesByChannel extends MainWorker {
 
                         errorString = "Номер занят.";
 
-                        JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                    //    JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
 
                         return;
 
@@ -10724,7 +10731,7 @@ public class ValuesByChannel extends MainWorker {
                         if (this.getTypRegime() == ValuesByChannel.REJIM_GET_HAND) {
 
 
-                            JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                         //   JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
 
                             return;
                         }
@@ -11216,6 +11223,9 @@ public class ValuesByChannel extends MainWorker {
         // выполняем команды и флаги для текущего типа связи
         // для каждого присоединения (point)
         runCommandByScript(typConnect, TS_GREATE);
+
+        result = errorString;
+
 
         // bitSetFlags.set(BSF_GSM_YES);
         // Добавляем параметры контроллера, если он есть
