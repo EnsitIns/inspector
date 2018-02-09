@@ -843,7 +843,7 @@ public class ValuesByChannel extends MainWorker {
                 if (hmCommands.containsKey(name)) {
                     command = hmCommands.get(name);
 
-                    hmWrite.put("set@" + name, sel);
+                    //    hmWrite.put("set@" + name, sel);
 
                     command.clearCommand();
                     alSelect.add(command.name);
@@ -872,7 +872,7 @@ public class ValuesByChannel extends MainWorker {
         currentCommands = null;
         CommandGet command;
 
-        hmWrite.clear();
+        //  hmWrite.clear();
 
         try {
 
@@ -5406,7 +5406,7 @@ public class ValuesByChannel extends MainWorker {
                             if (this.getTypRegime() == ValuesByChannel.REJIM_GET_HAND) {
 
 
-                            //    JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                                //    JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
 
 
                             }
@@ -7445,7 +7445,16 @@ public class ValuesByChannel extends MainWorker {
 
     public CommandGet findCommand(String name) {
 
-        CommandGet result = null;
+        CommandGet result;
+
+
+        result = hmCommands.get(name);
+
+        if (result != null) {
+
+            return result;
+        }
+
 
         for (String pribor : hmAllCommands.keySet()) {
 
@@ -7458,6 +7467,8 @@ public class ValuesByChannel extends MainWorker {
             }
 
         }
+
+
         return result;
     }
 
@@ -8394,7 +8405,7 @@ public class ValuesByChannel extends MainWorker {
                 if (errorString != null) {
 
 
-                    if (this.getTypRegime() == ValuesByChannel.REJIM_GET_HAND || this.getTypRegime() == ValuesByChannel.REJIM_GET_BUTTON ) {
+                    if (this.getTypRegime() == ValuesByChannel.REJIM_GET_HAND || this.getTypRegime() == ValuesByChannel.REJIM_GET_BUTTON) {
 
                         JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
                     }
@@ -8447,7 +8458,7 @@ public class ValuesByChannel extends MainWorker {
 
             } else {
 
-            //    answerProcess(errorString, ProcLogs.MSG_ERROR);
+                //    answerProcess(errorString, ProcLogs.MSG_ERROR);
 
             }
 
@@ -10495,7 +10506,7 @@ public class ValuesByChannel extends MainWorker {
 
                     if (errorString != null && getTypRegime() == REJIM_GET_HAND) {
 
-                      //  JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                        //  JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
 
                         return;
 
@@ -10508,7 +10519,7 @@ public class ValuesByChannel extends MainWorker {
 
                         errorString = "Удаленный модем недоступен.";
 
-                      //  JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                        //  JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
 
 
                         addPointInBlackList(idPoint, MapMessageProcess.DATA_BLACK);
@@ -10522,7 +10533,7 @@ public class ValuesByChannel extends MainWorker {
 
                         errorString = "Номер занят.";
 
-                    //    JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                        //    JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
 
                         return;
 
@@ -10731,7 +10742,7 @@ public class ValuesByChannel extends MainWorker {
                         if (this.getTypRegime() == ValuesByChannel.REJIM_GET_HAND) {
 
 
-                         //   JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
+                            //   JOptionPane.showMessageDialog(null, errorString, "Ошибка", JOptionPane.ERROR_MESSAGE);
 
                             return;
                         }
@@ -10859,7 +10870,7 @@ public class ValuesByChannel extends MainWorker {
         }
 
         alAddition.clear();
-        hmWrite.clear();
+        //hmWrite.clear();
         typContoller = null;
         typPack = null;
 //Устанавливаем режим чтения/записи данных

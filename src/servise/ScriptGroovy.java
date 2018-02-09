@@ -259,6 +259,12 @@ public class ScriptGroovy extends MainWorker {
                 String sGroup = resultSet.getString("group_groovy");
                 isGroup = (sGroup.equals("Выполнять для всей группы") ? true : false);
                 parameters = resultSet.getString("param_groovy");
+                if (!sGroup.isEmpty()) {
+                    parameters = (parameters.isEmpty() ? sGroup : parameters + ";" + sGroup);
+
+                }
+
+
                 isSMS = (resultSet.getInt("is_sms") > 0 ? true : false);
 
                 isMail = (resultSet.getInt("is_email") > 0 ? true : false);
@@ -323,14 +329,14 @@ public class ScriptGroovy extends MainWorker {
                     if (isSMS) {
                         // Отправляем sms при запуске...
 
-                        Map<String,String> prms=MathTrans.stringToMap(parameters,";");
+                        Map<String, String> prms = MathTrans.stringToMap(parameters, ";");
 
-                       //String phone
+                        //String phone
 
-                        String phone=prms.get("телефон");
-                        String port=prms.get("порт");
+                        String phone = prms.get("телефон");
+                        String port = prms.get("порт");
 
-                        if(phone!=null && port!=null) {
+                        if (phone != null && port != null) {
 
                             ValuesByChannel channel = new ValuesByChannel(null, null);
                             channel.sendSMS(nameSchedule, phone, port);

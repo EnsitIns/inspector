@@ -289,16 +289,15 @@ public class ExcelReport extends MainWorker {
             return map;
         }
 
-        if (hmValuesColl!=null){
+        if (hmValuesColl != null) {
 
-            for (String mapName:hmValuesColl.keySet()){
+            for (String mapName : hmValuesColl.keySet()) {
 
-                Map mapVal=hmValuesColl.get(mapName);
+                Map mapVal = hmValuesColl.get(mapName);
 
                 map.put(mapName, mapVal);
 
             }
-
 
 
         }
@@ -1364,7 +1363,7 @@ public class ExcelReport extends MainWorker {
 
             String lName = "Лист - " + idx;
             if (nameList != null) {
-                if(hmCurParam.containsKey(nameList)){
+                if (hmCurParam.containsKey(nameList)) {
                     lName = hmCurParam.get(nameList).toString();
                 }
 
@@ -1754,13 +1753,11 @@ public class ExcelReport extends MainWorker {
             mValues.put(id, svalue);
 
 
-
-
         } else {
 
             HashMap<Integer, Object> mValues = new HashMap<>();
             mValues.put(id, svalue);
-            hmValuesColl.put(nameCol,mValues);
+            hmValuesColl.put(nameCol, mValues);
 
         }
 
@@ -1786,7 +1783,11 @@ public class ExcelReport extends MainWorker {
         String sval;
         Sheet sheet = null;
 
-        //  for (int sheetNum = 0; sheetNum < wb.getNumberOfSheets(); sheetNum++) {
+        if (hmCollVal != null) {
+            hmCollVal.clear();
+        }
+
+        // /  for (int sheetNum = 0; sheetNum < wb.getNumberOfSheets(); sheetNum++) {
         // sheet = wb.getSheetAt(sheetNum);
         // int sheetNum = 0;
         sheet = wb.getSheetAt(0);
@@ -1883,7 +1884,6 @@ public class ExcelReport extends MainWorker {
                             hmCollVal.put(poz, svalue);
 
                         }
-
 
 
                         if (svalue.contains("${")) {

@@ -86,9 +86,6 @@ class ScriptTest {
 
     public Object evalScript(Map<String, Object> values, Object valhelp) {
 
-        // import servise.*;
-        //import connectdbf.SqlTask;
-
 
         servise.ExcelReport report = new ExcelReport(null);
         def nameContr = values.get("name_subconto");
@@ -149,7 +146,7 @@ class ScriptTest {
 
 
         if (error) {
-            return;
+         //   return;
         }
 
 
@@ -185,7 +182,7 @@ class ScriptTest {
 
 
         if (error) {
-  //          return;
+           // return;
         }
 
 
@@ -226,6 +223,7 @@ class ScriptTest {
 
         }
 
+        //alSend.clear();
 
         alSend << "ooo.ensit@gmail.com";
 
@@ -251,6 +249,7 @@ class ScriptTest {
 
 
             alSend.clear();
+
             alSend << "ooo.ensit@gmail.com";
 
             msg = "${msg} ${e.getMessage()}";
@@ -273,36 +272,71 @@ class ScriptTest {
                                  BitSet bitset, Map mapcommands, CommandGet cmd, ValuesByChannel channel) {
 
 
-        List values = cmd.result;
+        CommandGet cmdParent = mapcommands.getAt("SetProfilPower");
 
-        def hmVal = [:];
+        def parentResult = cmdParent.result;
 
-        hmVal.put("name_table", "profil_power");
-
-
-        hmVal.put("tangens_f", 0);
-
-        def val = values.get(0);
-        hmVal.put("power_pa", val);
-
-        val = values.get(1);
-        hmVal.put("power_pr", val);
-
-        val = values.get(2);
-        hmVal.put("power_qa", val);
-
-        val = values.get(3);
-        hmVal.put("power_qr", val);
+        Timestamp tsCmd = cmd.getProperty("value_date"); // дата команды
+        DateTime dateTimeLast = parentResult[1]; // дата последней записи
+        DateTime dateTimeCurrent = new DateTime(tsCmd.getTime());// дата текущей записи
 
 
-        val = values.get(4);
-        hmVal.put("value_date", val);
+        def iAddressLast = parentResult[0]; //  адрес пос. записи
+        def iStepTime = parentResult[2];
 
-        val = values.get(5);
-        hmVal.put("object_caption", val);
+        def iMultiple = 16; //шаг
 
 
-        return hmVal;
+        def vid = 3;
+        // def vid = 131;
+        def record;
+
+        Minutes minutes = Minutes.minutesBetween(dateTimeCurrent, dateTimeLast);
+
+        int countRec = minutes.getMinutes() / iStepTime;
+
+// расширенный профиль
+        if (bitset.get(ValuesByChannel.BSF_MEMORY_EX)) { // меркурий 233
+
+            if (bitset.get(ValuesByChannel.BSF_BYT17_YES)) {
+
+                iAddressLast = (iAddressLast | 0x10000);
+
+            }
+
+            record = iAddressLast - (countRec * iMultiple);
+
+
+
+            if (record > 0xFFFF) {
+
+                vid = 131;
+
+            }
+            if (record < 0) {
+
+                vid = 131;
+
+            }
+
+        } else {
+            // меркурий 230
+
+            // адрес   на дату текущей записи
+            record = iAddressLast - (countRec * iMultiple);
+
+        }
+
+
+
+        def poz2 = record & 0xFF;
+
+        def poz1 = record >>> 8;
+        poz1 = poz1 & 0xFF;
+
+        def setCmd = [vid, poz1, poz2];
+
+        return setCmd;
         //end
     }
 
@@ -545,6 +579,29 @@ class ScriptTest {
         //   import java.sql.Timestamp;
         //   import org.joda.time.Minutes;
         // import servise.*;
+
+
+        List lr = [];
+
+        String updv = channel.hmWrite.get(cmd.name);
+
+        updv = updv.trim();
+
+        def byt = updv.getBytes();
+
+        byt.each {
+
+            Integer b = it as Integer
+
+            lr << b;
+        }
+
+        return lr;
+
+
+
+
+
 
         CommandGet cmdParent = mapcommands.getAt("SetProfilPower");
 
