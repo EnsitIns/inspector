@@ -170,7 +170,7 @@ class ScriptTest {
                 } else if (procent > 0.15) {
 
 
-                    error = true;
+                   error = true;
 
                     //  MailClass.goMail(['ooo.ensit@gmail.com'], "Погрешность Отчета", "${it.value} ID=(${it.key})", nameContr, null, null);
                     //  error = true;

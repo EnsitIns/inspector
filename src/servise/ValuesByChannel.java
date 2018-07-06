@@ -399,6 +399,15 @@ public class ValuesByChannel extends MainWorker {
 
     }
 
+
+    public  String  sendAT(String  atCmd,String atRes,int timeout){
+
+    String result="";
+
+    return  result;
+    }
+
+
     public void setbLogTxD(boolean bLogTxD) {
         this.B_LOG_TXD = bLogTxD;
     }

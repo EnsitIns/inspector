@@ -20,7 +20,7 @@ import java.util.StringTokenizer;
  *
  * @author 1
  */
-public class Calculater {
+public class  Calculater {
 
     private static String answer = "";
     private static ArrayList<TData> DataList = SetConst();

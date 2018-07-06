@@ -46,7 +46,7 @@ class ValuesByChannelTest extends GroovyTestCase {
 
     ValuesByChannel channel=new ValuesByChannel(null,null);
 
-        channel.sendSMS("Отправка данных клиентам...","89172562616","40");
+        //channel.sendSMS("Отправка данных клиентам...","89172562616","40");
 
 
     }

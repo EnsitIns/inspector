@@ -339,7 +339,7 @@ public class ScriptGroovy extends MainWorker {
                         if (phone != null && port != null) {
 
                             ValuesByChannel channel = new ValuesByChannel(null, null);
-                            channel.sendSMS(nameSchedule, phone, port);
+                          //  channel.sendSMS(nameSchedule, phone, port);
                         }
 
                     }
